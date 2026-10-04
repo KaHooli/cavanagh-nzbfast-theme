@@ -1,0 +1,218 @@
+/* Cavanagh Family theme for nzbfast
+   Package revision __VERSION__
+
+   Install as `custom.css` in nzbfast's config folder (the folder holding
+   config.json - `/config/custom.css` in the official container). nzbfast
+   links this file LAST in the <head> of the dashboard and the poster wall,
+   so these rules win over the built-in ones without !important. Edit and
+   reload: no rebuild, no restart.
+
+   Do not edit `custom.css` in the repository root by hand - it is built
+   from `src/cavanagh-nzbfast.css` by `tools/build.py`, which embeds the
+   crest as a data URL (nzbfast serves no other file from the config
+   folder, so every asset this theme uses has to live inside this file).
+
+   Design rules, mirroring the Cavanagh authentik theme:
+   - Prefer nzbfast's shared design tokens (web/ui-tokens.html) over page
+     selectors. Tokens are what the dashboard, the wall and the manual all
+     read, so one override themes every surface consistently.
+   - Never touch the High-contrast theme. It is an accessibility setting.
+   - Never outrank a choice the user made in Settings > Interface
+     (accent, background, cards, text, border strength). Those layers are
+     re-asserted at the end of this file.
+*/
+
+/* ---------------------------------------------------------------------
+   Brand palette (identical to the authentik package)
+   --------------------------------------------------------------------- */
+:root {
+  --cavanagh-red: #8f171b;
+  --cavanagh-oxblood: #4a0c10;
+  --cavanagh-gold: #c69a45;
+  --cavanagh-ivory: #f5efe3;
+  --cavanagh-charcoal: #151515;
+  --cavanagh-black: #0c0c0d;
+
+  --cavanagh-crest: url("__CAVANAGH_CREST__");
+  --cavanagh-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+}
+
+/* ---------------------------------------------------------------------
+   Light palette: Warm Ivory ground, Cavanagh Red accent.
+   Applied for an explicit Light choice, and for Auto on a light OS.
+   --------------------------------------------------------------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5efe3;
+  --surface: #fbf8f2;
+  --surface-2: #f1e9da;
+  --fg: #231c18;
+  --dim: #6a5c4f;
+  --line: rgba(74, 12, 16, .12);
+  --acc: #8f171b;
+  --acc2: #80591a;
+  --ok: #1d7350;
+  --warn: #8a5a07;
+  --bad: #c41a1a;
+  --gold: #b0842f;
+  --code: #efe6d6;
+  --mark: #f6e3b4;
+  --cavanagh-rule: rgba(198, 154, 69, .55);
+  --cavanagh-glow: rgba(143, 23, 27, .06);
+  --cavanagh-wordmark: #4a0c10;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg: #f5efe3;
+    --surface: #fbf8f2;
+    --surface-2: #f1e9da;
+    --fg: #231c18;
+    --dim: #6a5c4f;
+    --line: rgba(74, 12, 16, .12);
+    --acc: #8f171b;
+    --acc2: #80591a;
+    --ok: #1d7350;
+    --warn: #8a5a07;
+    --bad: #c41a1a;
+    --gold: #b0842f;
+    --code: #efe6d6;
+    --mark: #f6e3b4;
+    --cavanagh-rule: rgba(198, 154, 69, .55);
+    --cavanagh-glow: rgba(143, 23, 27, .06);
+    --cavanagh-wordmark: #4a0c10;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Dark palette: Charcoal ground with gold hairlines and a red accent.
+   Applied for an explicit Dark choice, and for Auto on a dark OS.
+
+   nzbfast paints --acc both as a button fill under white text AND as
+   text on --surface, so the dark accent is a lifted Cavanagh Red that
+   holds 4.5:1 under white text while staying legible on the ground.
+   --bad is pushed toward coral so an error never reads as a brand-red
+   button.
+   --------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #100e0e;
+  --surface: #191616;
+  --surface-2: #221e1d;
+  --fg: #f6f0e5;
+  --dim: #a99e90;
+  --line: rgba(198, 154, 69, .16);
+  --acc: #cc3d42;
+  --acc2: #d9b66e;
+  --ok: #35c88a;
+  --warn: #f5b445;
+  --bad: #f28b6e;
+  --gold: #d9b66e;
+  --code: #1f1b1a;
+  --mark: #4a3a14;
+  --cavanagh-rule: rgba(198, 154, 69, .45);
+  --cavanagh-glow: rgba(143, 23, 27, .22);
+  --cavanagh-wordmark: #e3c27f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #100e0e;
+    --surface: #191616;
+    --surface-2: #221e1d;
+    --fg: #f6f0e5;
+    --dim: #a99e90;
+    --line: rgba(198, 154, 69, .16);
+    --acc: #cc3d42;
+    --acc2: #d9b66e;
+    --ok: #35c88a;
+    --warn: #f5b445;
+    --bad: #f28b6e;
+    --gold: #d9b66e;
+    --code: #1f1b1a;
+    --mark: #4a3a14;
+    --cavanagh-rule: rgba(198, 154, 69, .45);
+    --cavanagh-glow: rgba(143, 23, 27, .22);
+    --cavanagh-wordmark: #e3c27f;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Page ground: a soft oxblood glow in the top-left corner, echoing the
+   lion artwork on the authentik backgrounds. Skipped for High contrast
+   and for a user-chosen background colour.
+   --------------------------------------------------------------------- */
+:root:not([data-theme="contrast"]):not([data-userbg]) body {
+  background:
+    radial-gradient(1100px 640px at 0% 0%, var(--cavanagh-glow), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--cavanagh-gold) 38%, transparent);
+}
+
+/* ---------------------------------------------------------------------
+   Brand mark: the Cavanagh crest replaces the lightning-bolt glyph in the
+   dashboard header (`header h1 .logo`) and the wall bar (`.bar h1 a`).
+   The original glyph is hidden, not removed, so the click/keyboard
+   behaviour and accessible names of those controls are untouched.
+   The wall hides its wordmark text on phones; the crest remains.
+   --------------------------------------------------------------------- */
+:root:not([data-theme="contrast"]) header h1 .logo > svg.ic,
+:root:not([data-theme="contrast"]) .bar h1 a > svg.ic {
+  display: none;
+}
+
+:root:not([data-theme="contrast"]) header h1 .logo::before,
+:root:not([data-theme="contrast"]) .bar h1 a::before {
+  content: "";
+  display: inline-block;
+  flex: none;
+  width: 1.45em;
+  height: 1.45em;
+  margin-block: -.2em;
+  vertical-align: -.35em;
+  background: var(--cavanagh-crest) center / contain no-repeat;
+}
+
+:root:not([data-theme="contrast"]) .bar h1 a::before {
+  margin-inline-end: .45em;
+}
+
+:root:not([data-theme="contrast"]) header h1 .logo,
+:root:not([data-theme="contrast"]) .bar h1 a {
+  font-family: var(--cavanagh-serif);
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--cavanagh-wordmark);
+}
+
+/* Gold rule under the header, like the rule under CAVANAGH in the
+   wordmark. The wall bar already draws a bottom border; it just takes
+   the gold. */
+:root:not([data-theme="contrast"]) .wrap > header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--cavanagh-rule);
+}
+
+:root:not([data-theme="contrast"]) body > .bar {
+  border-bottom-color: var(--cavanagh-rule);
+}
+
+/* ---------------------------------------------------------------------
+   Respect the user's own Settings > Interface choices.
+   These repeat nzbfast's own layer rules (web/ui-tokens.html) so they
+   come after - and therefore win over - the palettes above, exactly as
+   they win over nzbfast's built-in palettes.
+   --------------------------------------------------------------------- */
+:root[data-accent] { --acc: var(--user-acc); }
+:root[data-userbg] { --bg: var(--user-bg); }
+:root[data-usersurface] { --surface: var(--user-surface); }
+:root[data-userfg] { --fg: var(--user-fg); }
+:root[data-border="faint"] { --line: color-mix(in srgb, var(--fg) 6%, transparent); }
+:root[data-border="strong"] { --line: color-mix(in srgb, var(--fg) 30%, transparent); }
