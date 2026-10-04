@@ -29,6 +29,22 @@ curl -fsSL -o ./config/custom.css \
   https://raw.githubusercontent.com/KaHooli/cavanagh-nzbfast-theme/main/custom.css
 ```
 
+### Unraid
+
+Unraid stores container config under appdata. Download the theme into the
+host folder mapped to the container's `/config` path. For an nzbfast container
+whose `/config` is mapped to `/mnt/cache/appdata/nzbfast`, run this in the
+Unraid terminal:
+
+```sh
+curl -fsSL -o /mnt/cache/appdata/nzbfast/custom.css \
+  https://raw.githubusercontent.com/KaHooli/cavanagh-nzbfast-theme/main/custom.css
+```
+
+If your mapping is different, such as the default
+`/mnt/user/appdata/nzbfast`, use that folder instead. You can find it under
+**Docker > nzbfast > Edit**, on the `/config` path.
+
 ### Other installs
 
 Download [`custom.css`](custom.css) and save it next to your nzbfast
@@ -37,7 +53,8 @@ Download [`custom.css`](custom.css) and save it next to your nzbfast
 ### Activate
 
 Reload the dashboard. nzbfast reads the file on every page load, so you do not
-need to restart or rebuild anything. To remove the theme, delete the file.
+need to restart or rebuild anything. To update the theme, run the same
+download command again. To remove the theme, delete the file.
 
 **Settings > Interface > Theme** selects the palette:
 
